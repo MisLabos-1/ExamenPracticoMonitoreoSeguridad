@@ -1,0 +1,14 @@
+services:
+
+  app:
+    build:
+      context: ./app
+    image: examenfinal-app:1.0.0
+    container_name: examenfinal-app
+    environment:
+      APP_NAME: Examen-Final-App
+      APP_VERSION: 1.0.0
+      INSTANCE_NAME: app-01
+    ports:
+      - "5000:5000"
+    restart: unless-stopped
