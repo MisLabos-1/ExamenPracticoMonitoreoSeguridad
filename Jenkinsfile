@@ -1,4 +1,4 @@
-pipeline {
+vpipeline {
 
     agent any
 
@@ -23,7 +23,26 @@ pipeline {
 
         }
 
-        stage('Test') {
+        stage('Secret Scan - Gitleaks') {
+
+            steps {
+
+                echo 'Buscando secretos'
+
+                sh '''
+                    docker run --rm \
+                    -v "$WORKSPACE":/workspace \
+                    zricethezav/gitleaks:latest \
+                    detect \
+                    --source=/workspace \
+                    --no-git
+                '''
+
+            }
+
+        }
+
+        stage('Tests') {
 
             steps {
 
@@ -54,6 +73,26 @@ pipeline {
                     docker build \
                     -t ${IMAGE_NAME}:${IMAGE_TAG} \
                     ./app
+                '''
+
+            }
+
+        }
+
+        stage('Vulnerability Scan - Trivy') {
+
+            steps {
+
+                echo 'Analizando vulnerabilidades'
+
+                sh '''
+                    docker run --rm \
+                    -v /var/run/docker.sock:/var/run/docker.sock \
+                    aquasec/trivy:latest \
+                    image \
+                    --severity HIGH,CRITICAL \
+                    --exit-code 1 \
+                    ${IMAGE_NAME}:${IMAGE_TAG}
                 '''
 
             }
