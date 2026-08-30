@@ -1,49 +1,160 @@
-# DevSecOps Local
+# Examen Practico Final
 
 ## Descripción
 
-Laboratorio local para implementar una infraestructura DevSecOps
-utilizando Docker y Docker Compose sobre Ubuntu 24.04 ejecutado
-mediante WSL2.
-
-## Objetivos
-
-- Implementar una aplicación contenedorizada.
-- Implementar balanceo de carga.
-- Implementar múltiples instancias de la aplicación.
-- Implementar CI/CD.
-- Implementar observabilidad.
-- Centralizar logs.
-- Implementar métricas y dashboards.
-- Implementar controles DevSecOps.
-- Implementar mecanismos de recuperación.
-- Aplicar hardening.
+Plataforma DevSecOps implementada localmente utilizando
+WSL2 y Docker.
 
 ## Arquitectura
 
-Windows
-→ WSL2
-→ Ubuntu 24.04
-→ Docker Engine
-→ Docker Compose
+Developer
+    |
+    v
+Jenkins
+    |
+    +-- Gitleaks
+    |
+    +-- Tests
+    |
+    +-- Docker Build
+    |
+    +-- Trivy
+    |
+    v
+Deployment
+    |
+    v
+Nginx
+    |
+    +-- App 01
+    |
+    +-- App 02
+    |
+    +-- Prometheus
+    |      |
+    |      v
+    |    Grafana
+    |
+    +-- Filebeat
+           |
+           v
+      Elasticsearch
+           |
+           v
+         Kibana
 
 ## Tecnologías
 
-- Ubuntu 24.04 LTS
 - WSL2
-- Docker Engine
+- Ubuntu
+- Docker
 - Docker Compose
-- Python / Flask
+- Python
+- Flask
+- Gunicorn
 - Nginx
-- Jenkins
 - Prometheus
 - Grafana
 - Elasticsearch
-- Filebeat
 - Kibana
-- Trivy
+- Filebeat
+- Jenkins
 - Gitleaks
+- Trivy
+- Git
 
-## Estado
+## Componentes
 
-Etapa 1 - Preparación de infraestructura.
+### Aplicación
+
+Dos instancias Flask:
+
+- APP1
+- APP2
+
+### Balanceador
+
+Nginx distribuye las solicitudes.
+
+### Monitoring
+
+Prometheus recolecta métricas.
+
+Grafana visualiza métricas.
+
+### Logging
+
+Filebeat recolecta logs.
+
+Elasticsearch almacena eventos.
+
+Kibana permite búsquedas.
+
+### CI/CD
+
+Jenkins automatiza:
+
+- Tests
+- Build
+- Security Scan
+- Deployment
+
+### Seguridad
+
+Gitleaks detecta secretos.
+
+Trivy analiza vulnerabilidades.
+
+## Ejecución
+
+docker compose up -d
+
+## Accesos
+
+| Servicio | URL |
+|---|---|
+| Aplicación | http://localhost |
+| Jenkins | http://localhost:8080 |
+| Prometheus | http://localhost:9090 |
+| Grafana | http://localhost:3000 |
+| Kibana | http://localhost:5601 |
+| Elasticsearch | http://localhost:9200 |
+
+# Despliegue rápido del proyecto
+
+## Objetivo
+
+Esta sección permite realizar una prueba rápida del despliegue completo del proyecto en una computadora local.
+
+El objetivo es únicamente descargar el proyecto y levantar todos los servicios mediante Docker Compose.
+
+---
+
+# Requisitos previos
+
+Antes de iniciar, se debe contar con:
+
+- Git instalado.
+- Docker Engine instalado.
+- Docker Compose instalado.
+- WSL2 + Ubuntu en caso de utilizar Windows.
+
+Verificar las herramientas:
+
+```bash
+git --version
+docker --version
+docker compose version
+
+---
+# Despliegue del Proyecto
+
+git clone https://github.com/MisLabos-1/ExamenPracticoMonitoreoSeguridad.git
+
+cd REPOSITORIO
+
+sudo sysctl -w vm.max_map_count=262144
+
+docker compose up -d --build
+
+docker compose ps
