@@ -114,6 +114,23 @@ services:
       - examenfinal-net
     restart: unless-stopped
 
+  jenkins:
+    build:
+      context: ./jenkins
+    image: examenfinal-jenkins:1.0.0
+    container_name: examenfinal-jenkins
+    user: root
+    ports:
+      - "8080:8080"
+      - "50000:50000"
+    volumes:
+      - jenkins-data:/var/jenkins_home
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./:/workspace
+    networks:
+      - examenfinal-net
+    restart: unless-stopped
+
 
 networks:
   examenfinal-net:
@@ -129,3 +146,6 @@ volumes:
 
   elasticsearch-data:
     name: examenfinal-elasticsearch-data
+
+  jenkins-data:
+    name: examenfinal-jenkins-data
