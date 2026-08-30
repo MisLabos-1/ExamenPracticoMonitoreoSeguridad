@@ -105,7 +105,7 @@ services:
     container_name: examenfinal-filebeat
     user: root
     volumes:
-      - /opt/filebeat/filebeat.yml:/usr/share/filebeat/filebeat.yml:ro
+      - ./filebeat/filebeat.yml:/usr/share/filebeat/filebeat.yml:ro
       - /var/lib/docker/containers:/var/lib/docker/containers:ro
       - /var/run/docker.sock:/var/run/docker.sock:ro
     depends_on:
@@ -139,10 +139,10 @@ networks:
 
 volumes:
   prometheus-data:
-    name: devsecops-prometheus-data
+    name: examenfinal-prometheus-data
 
   grafana-data:
-    name: devsecops-grafana-data
+    name: examenfinal-grafana-data
 
   elasticsearch-data:
     name: examenfinal-elasticsearch-data
